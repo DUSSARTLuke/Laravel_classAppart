@@ -1,6 +1,3 @@
-Installer Laravel (pré-requis composer sur votre pc) :
-
-    Composer install laravel
+Récupérer les bundle :
+    composer update
     
-Créer projet laravel 
-    composer create-project
