@@ -44,8 +44,8 @@ class dbcreate extends Command
         
         config(['database.connections.mysql.database' => null]);
 
-        $query = "DROP DATABASE $schemaName;";
-        DB::statement($query);
+        // $query = "DROP DATABASE $schemaName;";
+        // DB::statement($query);
 
         $query = "CREATE DATABASE IF NOT EXISTS $schemaName CHARACTER SET $charset COLLATE $collation;";
         DB::statement($query);
