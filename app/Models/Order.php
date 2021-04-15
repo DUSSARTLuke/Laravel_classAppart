@@ -14,6 +14,6 @@ class Order extends Model
 
     public function Products()
     {
-        return $this->belongsToMany('App\Models\Product')->withTimestamps();
+        return $this->belongsToMany('App\Models\Product', 'order_items')->withTimestamps();
     }
 }
