@@ -1,9 +1,12 @@
 Récupérer les bundle :
-    composer update
+### `composer update`
     
     
 Récupérer la base de données : 
-    php artisan db:create
+### `php artisan db:create`
 
 Récupérer les migrations : 
-    php artisan migrate
+### `php artisan migrate`
+
+Enfin Taper cette commande afin de lancer le service : 
+### `php artisan serve`
