@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends Controller
 {
@@ -47,8 +48,10 @@ class OrderController extends Controller
         for ($i = 0; $i < count($product); $i++) {
             $order->Products()->attach([$product[$i] => ['quantite' => $quantite[$i]]]);
         }
-        
-        return $order;
+
+        return response()->json([
+            'message' => 'Commande enregistrée'
+        ], 200);
     }
 
     /**
@@ -59,7 +62,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return Order::find($order);
     }
 
     /**
@@ -82,7 +85,20 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $order = Order::findOrFail($order);
+        $input = $request->all();
+        $order->libelle = $input['numOrder'];
+
+        $product = explode(',', $request->product_ids);
+        $quantite = explode(',', $request->quantite);
+        for ($i = 0; $i < count($product); $i++) {
+            $order->products()->sync([$product[$i] => ['quantite' => $quantite[$i]]]);
+        }
+        if ($order->save()) {
+            return response()->json([
+                'message' => 'Modification de la commande ' . $order->get('numOrder') . ' effectuée',
+            ], 201);
+        }
     }
 
     /**

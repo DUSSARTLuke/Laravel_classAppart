@@ -32,13 +32,14 @@ Route::post('/products', [ProductController::class, 'store']);
 
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
+Route::put('/orders/{id}', [OrderController::class, 'update']);
 
 // Protection des routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
+// Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::post('/deconnexion', [AuthController::class, 'deconnexion']);
-});
+// });
 
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {

@@ -9,7 +9,7 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'libelle', 'slug', 'description', 'price'
+        'libelle', 'description', 'price'
     ];
 
     public function Orders()
