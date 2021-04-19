@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class OrderSeeder extends Seeder
 {
@@ -27,17 +28,23 @@ class OrderSeeder extends Seeder
         $product_ids = Product::all()->pluck('id')->toArray();
         $order_ids = Order::all()->pluck('id')->toArray();
 
-        for ($i = 0; $i < 50; $i++) {
-            OrderProduct::create([
-                'order_id' => $faker->randomElement($order_ids),
-                'product_id' => $faker->randomElement($product_ids),
-                'quantité' => $faker->numberBetween(1, 10),
-            ]);
+
+        for ($i = 1; $i < count($order_ids) + 1; $i++) {
+            $price = 0;
+            $order = Order::findorFail($i);
+            for ($j = 0; $j < $faker->numberBetween(1, 10); $j++) {
+                $prod_id = $faker->randomElement($product_ids);
+                $quantite = $faker->numberBetween(1, 10);
+                OrderProduct::create([
+                    'order_id' => $i,
+                    'product_id' => $prod_id,
+                    'quantite' => $quantite,
+                ]);
+                $price += $order->recupPriceProduct($prod_id) * $quantite;
+            }
+            $order->price = $price;
+            $order->save();
         }
-        for ($i = 1; $i <= count($order_ids); $i++) {
-            $orderProd = OrderProduct::where(['order_id', $i]);
-            $prix = $orderProd->
-            $order->update()
-        }
+        
     }
 }

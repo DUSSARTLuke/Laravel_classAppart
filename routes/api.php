@@ -33,6 +33,7 @@ Route::post('/products', [ProductController::class, 'store']);
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
+Route::get('/orders/{id}', [OrderController::class, 'show']);
 
 // Protection des routes
 // Route::group(['middleware' => ['auth:sanctum']], function () {

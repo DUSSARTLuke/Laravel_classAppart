@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -14,6 +15,13 @@ class Order extends Model
 
     public function Products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantite');
+        return $this->belongsToMany(Product::class)->withPivot('quantite')->withTimestamps();
+    }
+
+    public function recupPriceProduct(int $id)
+    {
+
+        $priceP = DB::table('products')->where(['id' => $id])->pluck('price')->first();
+        return $priceP;
     }
 }

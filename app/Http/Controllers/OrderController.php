@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Order as ResourcesOrder;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,12 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return Order::all();
+        $orders = Order::all();
+        $result = [];
+        foreach ($orders as $o) {
+            array_push($result, new ResourcesOrder($o));
+        }
+        return $result;
     }
 
     /**
@@ -37,18 +43,24 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate(['numOrder' => 'required',
+        $request->validate([
+            'numOrder' => 'required',
             'product_ids' => 'required', 'quantite' => 'required',
-            
+
         ]);
 
+        $price = 0;
         $order = Order::create($request->all());
         $product = explode(',', $request->product_ids);
         $quantite = explode(',', $request->quantite);
         for ($i = 0; $i < count($product); $i++) {
             $order->Products()->attach([$product[$i] => ['quantite' => $quantite[$i]]]);
+            $prodP = $order->recupPriceProduct($product[$i]) * $quantite[$i];
+            $price += $prodP;
         }
 
+        $order->price = $price;
+        $order->save();
         return response()->json([
             'message' => 'Commande enregistrée'
         ], 200);
@@ -60,9 +72,11 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(int $id)
     {
-        return Order::find($order);
+        $order = Order::find($id);
+        return new ResourcesOrder($order);
+       
     }
 
     /**
@@ -83,21 +97,29 @@ class OrderController extends Controller
      * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, int $id)
     {
-        $order = Order::findOrFail($order);
+        $order = Order::findOrFail($id);
+        // return $request->all();
         $input = $request->all();
-        $order->libelle = $input['numOrder'];
+        $order->numOrder = $input['numOrder'];
 
         $product = explode(',', $request->product_ids);
         $quantite = explode(',', $request->quantite);
+
+        $order->Products()->detach();
         for ($i = 0; $i < count($product); $i++) {
-            $order->products()->sync([$product[$i] => ['quantite' => $quantite[$i]]]);
+            $order->Products()->attach([$product[$i] => ['quantite' => $quantite[$i]]]);
         }
+
         if ($order->save()) {
             return response()->json([
-                'message' => 'Modification de la commande ' . $order->get('numOrder') . ' effectuée',
+                'message' => 'Modification de la commande  ' . $order->id . ' effectuée',
             ], 201);
+        } else {
+            return response()->json([
+                'message' => 'Modification de la commande  ' . $order->id . ' non effectuée',
+            ], 204);
         }
     }
 
