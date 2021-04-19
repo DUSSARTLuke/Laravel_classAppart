@@ -37,12 +37,16 @@ class OrderController extends Controller
     {
 
         $request->validate([
-            'product_id' => 'required',
+            'product_ids' => 'required',
             'price' => 'required|',
         ]);
 
         $order = Order::create($request->all());
-        $order->Products()->attach($request->product_id);
+        $product = explode(',', $request->product_ids);
+        foreach ($product as $p) {
+            $order->Products()->attach($p);
+        }
+        
         return $order;
     }
 
