@@ -22,7 +22,7 @@ class OrderSeeder extends Seeder
         \Bezhanov\Faker\ProviderCollectionHelper::addAllProvidersTo($faker);
         for ($i = 1; $i <= 30; $i++) {
             Order::create([
-                'numOrder' => "0000000000" + $i,
+                'numOrder' => $faker->bothify('ORD####????'),
             ]);
         }
         $product_ids = Product::all()->pluck('id')->toArray();
