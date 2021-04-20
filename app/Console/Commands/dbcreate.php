@@ -47,7 +47,7 @@ class dbcreate extends Command
         // $query = "DROP DATABASE $schemaName;";
         // DB::statement($query);
 
-        $query = "CREATE DATABASE IF NOT EXISTS $schemaName CHARACTER SET $charset COLLATE $collation;";
+        $query = "CREATE DATABASE $schemaName CHARACTER SET $charset COLLATE $collation;";
         DB::statement($query);
 
         echo "DATABASE $schemaName created successfully";

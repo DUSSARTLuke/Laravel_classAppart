@@ -26,20 +26,20 @@ use App\Http\Controllers\OrderController;
 Route::get('/products/search/{name}', [ProductController::class, 'search']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{id}', [ProductController::class, 'show']);
-Route::post('/inscription', [AuthController::class, 'inscription']);
-Route::post('/connexion', [AuthController::class, 'connexion']);
 Route::post('/products', [ProductController::class, 'store']);
+Route::put('/products/{id}', [ProductController::class, 'update']);
+Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
 Route::put('/orders/{id}', [OrderController::class, 'update']);
 Route::get('/orders/{id}', [OrderController::class, 'show']);
 
-// Protection des routes
+// Protection des routes non effectuée 
 // Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-    Route::post('/deconnexion', [AuthController::class, 'deconnexion']);
+    // Route::post('/inscription', [AuthController::class, 'inscription']);
+// Route::post('/connexion', [AuthController::class, 'connexion']);
+    // Route::post('/deconnexion', [AuthController::class, 'deconnexion']);
 // });
 
 
